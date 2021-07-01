@@ -1,0 +1,76 @@
+<html>  
+<head>
+<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+<script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"type="text/javascript" charset="utf-8"></script>
+<script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+<script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+
+</head>
+  
+<body style='margin: 0'>
+<div style="width: 100%; height: 100%" id="map"></div>
+
+<script>	
+
+
+function addMarkerToGroup(group, coordinate, html) {
+  var marker = new H.map.Marker(coordinate);
+  // add custom data to the marker
+  marker.setData(html);
+  group.addObject(marker);
+}
+
+function addInfoBubble(map) {
+  var group = new H.map.Group();
+
+  map.addObject(group);
+
+  // add 'tap' event listener, that opens info bubble, to the group
+  group.addEventListener('tap', function (evt) {
+    // event target is the marker itself, group is a parent event target
+    // for all objects that it contains
+    var bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
+      // read custom data
+      content: evt.target.getData()
+    });
+    // show info bubble
+    ui.addBubble(bubble);
+  }, false);
+
+  addMarkerToGroup(group, {lat:51.51682995, lng:-0.07382257161686454},
+    '<div>Our arrival at ...</div>' +
+    '</div><img width=200 height=200 src="https://images.unsplash.com/photo-1607749111659-e1c8e05f5f24?ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8ZnJpZW5kc3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"></img></div>');
+    
+      addMarkerToGroup(group, {lat:51.5128101, lng:-0.1208676},
+    '<div>So much fun at ... </div>' +
+    '</div><img width=200 height=200 src="https://images.unsplash.com/photo-1536010305525-f7aa0834e2c7?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTN8fGZyaWVuZHN8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"></img></div>');
+    
+      addMarkerToGroup(group, {lat:51.52395185, lng:-0.07163699862334834},
+    '<div>Finally just chilling out ... </div>' +
+    '</div><img width=200 height=200 src="https://images.unsplash.com/photo-1622495894289-f47b79f0836c?ixid=MnwxMjA3fDF8MHxzZWFyY2h8MjF8fGZyaWVuZHN8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"></img></div>');
+}
+var platform = new H.service.Platform({
+        'apikey': 'ChIhFoYbHTKk5vEt_c15yORfZOejN5U4CV-sX9tmJnk'
+         });	
+// Obtain the default map types from the platform object
+var defaultLayers = platform.createDefaultLayers();
+
+var map = new H.Map(document.getElementById('map'), defaultLayers.vector.normal.map, {
+  // initial center and zoom level of the map
+  center: new H.geo.Point(51.5073219, -0.1276474),
+  zoom: 11.5,
+  pixelRatio: window.devicePixelRatio || 1
+});
+
+window.addEventListener('resize', () => map.getViewPort().resize());
+// Behavior implements default interactions for pan/zoom 
+var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+addInfoBubble(map);
+
+</script>
+</body>
+</html>
