@@ -1,1 +1,2 @@
-web: gunicorn here-map.wsgi
+web: gunicorn here-map:app
+
