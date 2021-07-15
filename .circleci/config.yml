@@ -6,6 +6,7 @@ orbs:
   # so you dont have to copy and paste it everywhere.
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
   python: circleci/python@1.2
+  aws-ecr: circleci/aws-ecr@7.0.0
 
 workflows:
   sample:  # This is the name of the workflow, feel free to change it to better match your workflow.
@@ -13,10 +14,7 @@ workflows:
     # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows 
     jobs:
       - build-and-test
-      - python/flake8
-      - python/pylint
-      - python/black
-
+      - login-to-aws
 
 jobs:
   build-and-test:  # This is the name of the job, feel free to change it to better match what you're trying to do!
@@ -42,3 +40,11 @@ jobs:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
           command: pytest
+          
+  login-to-aws:
+        - aws-ecr/ecr-login:
+          account-url: https://668481136896.signin.aws.amazon.com
+          aws-access-key-id: AKIAZXJEUVEADUXUOC7S
+          aws-secret-access-key: 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
+          profile-name: default
+          region: us-east-1
