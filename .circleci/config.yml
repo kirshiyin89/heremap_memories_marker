@@ -19,7 +19,7 @@ workflows:
             - build-and-test
           filters:
             branches:
-              only: sequential-branch-filter
+              only: circleci-project-setup
 
 jobs:
   build-and-test:  # This is the name of the job, feel free to change it to better match what you're trying to do!
