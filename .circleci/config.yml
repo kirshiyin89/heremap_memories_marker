@@ -20,19 +20,9 @@ workflows:
           filters:
             branches:
               only: master
-  heroku_deploy:
-    jobs:
-      - deploy           
+          
 
 jobs:
-  deploy:
-    executor: heroku/default
-    steps:
-      - checkout
-      - heroku/install
-      - run:
-          command: >
-            echo "hello"
   build-and-test:  # This is the name of the job, feel free to change it to better match what you're trying to do!
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
     # You can specify an image from Dockerhub or use one of the convenience images from CircleCI's Developer Hub
