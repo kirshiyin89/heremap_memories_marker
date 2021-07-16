@@ -18,17 +18,29 @@ workflows:
   sched-wf:
     triggers:
       - schedule:
-          cron: "* * * * *" 
+          cron: "3 * * * *,1,2,3,4,5" 
           filters:
             branches:
-              only: dev
+              only: master
+        
     jobs:
+       - build
        - heroku/deploy-via-git:
           filters:
             branches:
-              only: master       
+              only: master
+          requires:
+            - build       
 
 jobs:
+  build:
+    docker:
+      - image: cimg/python:3.8
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+
   build-and-test:  # This is the name of the job, feel free to change it to better match what you're trying to do!
     # These next lines defines a Docker executors: https://circleci.com/docs/2.0/executor-types/
     # You can specify an image from Dockerhub or use one of the convenience images from CircleCI's Developer Hub
