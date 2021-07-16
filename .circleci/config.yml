@@ -21,7 +21,7 @@ workflows:
           cron: "* * * * *" 
           filters:
             branches:
-              only: master
+              only: dev
     jobs:
        - heroku/deploy-via-git:
           filters:
