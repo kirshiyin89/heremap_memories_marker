@@ -12,10 +12,10 @@ workflows:
   sched-cd-wf:
     triggers:
       - schedule:
-          cron: "* * * * 1,2,3,4,5" 
+          cron: "0 16 * * 1,2,3,4,5" 
           filters:
             branches:
-              only: master
+              only: dev
         
     jobs:
        - build
