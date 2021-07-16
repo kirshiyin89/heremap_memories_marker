@@ -14,13 +14,19 @@ workflows:
     # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows 
     jobs:
       - build-and-test
-      - heroku/deploy-via-git:
-          requires:
-            - build-and-test
+
+  sched-wf:
+    triggers:
+      - schedule:
+          cron: "* * * * *" 
           filters:
             branches:
-              only: master
-          
+              only: /^dev.*/
+    jobs:
+       - heroku/deploy-via-git:
+          filters:
+            branches:
+              only: master       
 
 jobs:
   build-and-test:  # This is the name of the job, feel free to change it to better match what you're trying to do!
@@ -46,4 +52,3 @@ jobs:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
           command: pytest
-          
