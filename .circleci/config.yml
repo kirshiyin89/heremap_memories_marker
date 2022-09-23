@@ -1,0 +1,47 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@1.2
+  heroku: circleci/heroku@0.0.10
+
+workflows:
+  ci-wf:
+    jobs:
+      - build-and-test
+
+  sched-cd-wf:
+    triggers:
+      - schedule:
+          cron: "0 16 * * 1,2,3,4,5" 
+          filters:
+            branches:
+              only: master
+        
+    jobs:
+       - build
+       - heroku/deploy-via-git:
+          filters:
+            branches:
+              only: master
+          requires:
+            - build       
+
+jobs:
+  build:
+    docker:
+      - image: cimg/python:3.8
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+
+  build-and-test:
+    docker:
+      - image: cimg/python:3.8
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+      - run:
+          name: Run tests
+          command: pytest
